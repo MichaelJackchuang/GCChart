@@ -1,15 +1,15 @@
 # iOS-UI之简易图表——饼图(扇形图)、柱状图、折(曲)线图<br>
 先来看看效果<br>
-1.饼图(扇形图)<br>
+1. 饼图(扇形图)<br>
 ![](img/pieImg_1.png) ![](img/pieImg_2.png)
 ![](img/pieImg_3.gif)
 
-2.柱状图<br>
+2. 柱状图<br>
 ![](img/columnImg_1.png) ![](img/columnImg_2.png)
 ![](img/columnImg_3.png) ![](img/columnImg_4.png)
 ![](img/columnImg_5.gif)
 
-3.折线图<br>
+3. 折线图<br>
 ![](img/lineImg_1.png) ![](img/lineImg_2.png)
 ![](img/lineImg_3.png) ![](img/lineImg_4.png)
 ![](img/lineImg_5.gif) 
@@ -17,9 +17,9 @@
 样子粗糙，见笑了。
 现在来看看实现过程
 ## 一、饼图(扇形图)
-### 1.实现思路
+### 1. 实现思路
 实现思路其实很简单，首先算传入数据数组的数据总和，然后根据每个数据占比来乘以2π，得到每个数据的弧度，然后在循环中利用UIBezierPath的addArcWithCenter: radius: startAngle: endAngle: clockwise:方法设置路径，从圆顶点，即-π/2处开始,用CAShapeLayer画出子扇区，设置好颜色和半径就完成了。
-### 2.核心代码
+### 2. 核心代码
 ```Objective-C
 CGFloat startAngle = -M_PI_2;
 for (int i = 0; i < self.pieDataArray.count; i++) {
@@ -76,9 +76,9 @@ strokeAnimation.removedOnCompletion = YES;
 多层饼图的内层实现和单层饼图类似，外层实现是只利用UIBezierPath画一个圆弧轨迹，并设置线宽lineWidth和内层没有重合部分就行了。
 
 ## 二、柱状图
-### 1.实现思路
+### 1. 实现思路
 首先找到数据中的最大值，向上取整十或整百或整千并设置为Y轴最大值，然后在Y轴右侧放置一个scrollView（当数据超过5组时可以滚动），然后根据传入数据的分组标题，设置X轴和X轴分组标题，然后根据每个具体数据的值，算出柱顶点坐标，然后用UIBezierPath来设置柱路径，再画出柱子
-### 2.核心代码
+### 2. 核心代码
 ```Objective-C
 NSString *num = self.dataArray[i];
 CGFloat columnHeight = (self.yAxisView.bounds.size.height - 20) * [num intValue] / maxNum;
@@ -145,11 +145,11 @@ strokeAnimation.removedOnCompletion = YES;
 一个单柱的柱状图就实现了，如果要实现多柱（最多4柱，因为多了不好看，嘻嘻~），也不复杂，大概实现思路和单柱一样，只有一点就是需要调整每组柱体的x坐标在每组的中点即可。
 
 ## 三、折线图
-### 1.实现思路
+### 1. 实现思路
 单纯的折线图实现思路起始很简单，就是在背景上利用循环，算出每个数据的点坐标，然后用UIBezierPath和CAShapeLayer来画出每个点之前的直线就行了。
 
 然而，如果要把折线换成平滑的曲线，这就不好实现了，需要用到UIBezierPath的addCurveToPoint: controlPoint1: controlPoint2:方法了，除了需要传入数据点，还需要传入两个控制点，因为贝塞尔曲线是利用两个控制点来确定一段曲线路径的（大致内容参考自：<https://www.jianshu.com/p/c883fbf52681>，感谢大佬的分享），但是我依然不知道这两个控制点怎么来确定，毕竟这太高数了（参考自：<https://wenku.baidu.com/view/c790f8d46bec0975f565e211.html>），我又在网上搜了一下，有现成的（原谅我这个白嫖党）<https://www.jianshu.com/p/c33081adce28>(再次感谢大佬)，于是乎借(cmd+c)鉴(cmd+v)来用。在曲线找点开始之前，先另外创建一个可变数组(NSMutableArray)pointArray，先在这个数组第一个元素的位置保存上原点(0,0)的坐标，用来确定第一段曲线，然后将数据（此时已经转化成CGPointValue)挨个存入pointArray，最后再加上曲线末端向右偏移半个dataView的宽度的距离在x轴上的坐标，用来确定最后一段曲线。最后用CAShapelayer把曲线画出来。
-### 2.核心代码
+### 2. 核心代码
 单纯的折线时
 ```Objective-C
 UIBezierPath *dataPath = [UIBezierPath bezierPath];
