@@ -193,9 +193,9 @@
         if (self.showPercentage) {
             NSString *num = self.pieDataArray[i];
             if (self.pieDataNameArray.count == 0 || self.pieDataNameArray.count != self.pieDataArray.count) {
-                lblMark.text = [NSString stringWithFormat:@"%.2f%%",[num floatValue] / total];
+                lblMark.text = [NSString stringWithFormat:@"%.2f%%",[num floatValue] / total * 100];
             } else {
-                lblMark.text = [NSString stringWithFormat:@"%@:%.2f%%",self.pieDataNameArray[i],[num floatValue] / total];
+                lblMark.text = [NSString stringWithFormat:@"%@:%.2f%%",self.pieDataNameArray[i],[num floatValue] / total * 100];
             }
         } else {
             if (!self.pieDataUnit) {
@@ -406,9 +406,9 @@
         if (self.showPercentage) {
             NSString *num = self.pieOutsideDataArray[i];
             if (self.pieDataNameArray.count == 0 || self.pieDataNameArray.count != self.pieOutsideDataArray.count) {
-                lblMark.text = [NSString stringWithFormat:@"%.2f%%",[num floatValue] / outsideTotal];
+                lblMark.text = [NSString stringWithFormat:@"%.2f%%",[num floatValue] / outsideTotal * 100];
             } else {
-                lblMark.text = [NSString stringWithFormat:@"%@:%.2f%%",self.pieDataNameArray[i],[num floatValue] / outsideTotal];
+                lblMark.text = [NSString stringWithFormat:@"%@:%.2f%%",self.pieDataNameArray[i],[num floatValue] / outsideTotal * 100];
             }
         } else {
             if (!self.pieDataUnit) {
