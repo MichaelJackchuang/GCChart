@@ -45,6 +45,21 @@ typedef NS_ENUM(NSInteger, LegendPosition) {
 @property (nonatomic,strong) NSArray *dataArray;
 
 /**
+y轴最大值，不设置这个值则自动查找数组中最大值
+*/
+@property (nonatomic,copy) NSString *maxNum;
+
+/**
+y轴最小值，不设置这个值则自动查找数组中最小值
+*/
+@property (nonatomic,copy) NSString *minNum;
+
+/**
+y轴刻度值，设置此数组则不自动计算y轴刻度值
+*/
+@property (nonatomic,strong) NSArray *yAxisNums;
+
+/**
  x轴标题
  */
 @property (nonatomic,copy) NSString *xAxisTitle;

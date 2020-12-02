@@ -106,25 +106,50 @@
     lineView.backgroundColor = [self colorWithHexString:@"#898989" andAlpha:1.0];
     [self.yAxisView addSubview:lineView];
     
-    int maxValue = [[self.dataArray valueForKeyPath:@"@max.intValue"] intValue];// 寻找数组中的最大值
-    NSInteger maxNum = [self approximateRoundNumberWithString:[NSString stringWithFormat:@"%d",maxValue]];// 取近似最大值
-    NSString *str = [[NSString stringWithFormat:@"%ld",(long)maxNum] substringToIndex:1];
-    int level = (int)maxNum / [str intValue]; // 数量级 整十或整百或整千等
-    for (int i = 0; i < [str intValue]; i++) {
-        CGFloat lblY = self.yAxisView.bounds.size.height - 28 - i * (lineView.bounds.size.height / [str intValue]);
-        UILabel *lblYAxisNum = [[UILabel alloc] initWithFrame:CGRectMake(0, lblY, 29, 16)];
-        lblYAxisNum.font = [UIFont systemFontOfSize:8];
-        lblYAxisNum.textColor = [self colorWithHexString:@"#898989" andAlpha:1.0];
-        lblYAxisNum.textAlignment = NSTextAlignmentCenter;
-        lblYAxisNum.text = [NSString stringWithFormat:@"%d",i * level];
-        [self.yAxisView addSubview:lblYAxisNum];
+    int maxValue = 0;
+    float maxNum = 0;
+    NSString *str = @"";
+    if (self.yAxisNums.count == 0) {
+        maxValue = [[self.dataArray valueForKeyPath:@"@max.intValue"] intValue];// 寻找数组中的最大值
+        
+        
+        if (!self.maxNum || self.maxNum.length == 0) {
+            maxNum = [self approximateRoundNumberWithString:[NSString stringWithFormat:@"%d",maxValue]];// 取近似最大值
+        } else {
+            maxNum = [self.maxNum intValue];
+        }
+        
+        str = [[NSString stringWithFormat:@"%ld",(long)maxNum] substringToIndex:1];
+        int level = (int)maxNum / [str intValue]; // 数量级 整十或整百或整千等
+        for (int i = 0; i < [str intValue]; i++) {
+            CGFloat lblY = self.yAxisView.bounds.size.height - 28 - i * (lineView.bounds.size.height / [str intValue]);
+            UILabel *lblYAxisNum = [[UILabel alloc] initWithFrame:CGRectMake(0, lblY, 29, 16)];
+            lblYAxisNum.font = [UIFont systemFontOfSize:8];
+            lblYAxisNum.textColor = [self colorWithHexString:@"#898989" andAlpha:1.0];
+            lblYAxisNum.textAlignment = NSTextAlignmentCenter;
+            lblYAxisNum.text = [NSString stringWithFormat:@"%d",i * level];
+            [self.yAxisView addSubview:lblYAxisNum];
+        }
+        if (self.dataArray.count != 0 || self.maxNum.length != 0) {
+            UILabel *lblMax = [[UILabel alloc] initWithFrame:CGRectMake(0, -8, 29, 16)];
+            lblMax.font = [UIFont systemFontOfSize:8];
+            lblMax.textColor = [self colorWithHexString:@"#898989" andAlpha:1.0];
+            lblMax.textAlignment = NSTextAlignmentCenter;
+            lblMax.text = [NSString stringWithFormat:@"%ld",(long)maxNum];
+            [self.yAxisView addSubview:lblMax];
+        }
+    } else {
+        maxNum = [self.yAxisNums.lastObject intValue];
+        for (int i = 0; i < self.yAxisNums.count; i++) {
+            CGFloat lblY = self.yAxisView.bounds.size.height - 28 - i * (lineView.bounds.size.height / (self.yAxisNums.count - 1));
+            UILabel *lblYAxisNum = [[UILabel alloc] initWithFrame:CGRectMake(0, lblY, 29, 16)];
+            lblYAxisNum.font = [UIFont systemFontOfSize:8];
+            lblYAxisNum.textColor = [self colorWithHexString:@"#898989" andAlpha:1.0];
+            lblYAxisNum.textAlignment = NSTextAlignmentCenter;
+            lblYAxisNum.text = self.yAxisNums[i];
+            [self.yAxisView addSubview:lblYAxisNum];
+        }
     }
-    UILabel *lblMax = [[UILabel alloc] initWithFrame:CGRectMake(0, -8, 29, 16)];
-    lblMax.font = [UIFont systemFontOfSize:8];
-    lblMax.textColor = [self colorWithHexString:@"#898989" andAlpha:1.0];
-    lblMax.textAlignment = NSTextAlignmentCenter;
-    lblMax.text = [NSString stringWithFormat:@"%ld",(long)maxNum];
-    [self.yAxisView addSubview:lblMax];
     
     if (self.dataArray.count <= 5) {
         self.scrollView.contentSize = CGSizeMake(self.scrollView.bounds.size.width, self.scrollView.bounds.size.width);
