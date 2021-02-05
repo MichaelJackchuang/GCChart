@@ -14,8 +14,10 @@
 ![](img/lineImg_3.png) ![](img/lineImg_4.png)
 ![](img/lineImg_5.gif) 
 
-样子粗糙，见笑了。
-现在来看看实现过程
+样子粗糙，见笑了。<br>
+Swift版本地址<https://github.com/MichaelJackchuang/GCChartSwift><br>
+
+现在来看看实现过程<br>
 ## 一、饼图(扇形图)
 ### 1. 实现思路
 实现思路其实很简单，首先算传入数据数组的数据总和，然后根据每个数据占比来乘以2π，得到每个数据的弧度，然后在循环中利用UIBezierPath的addArcWithCenter: radius: startAngle: endAngle: clockwise:方法设置路径，从圆顶点，即-π/2处开始,用CAShapeLayer画出子扇区，设置好颜色和半径就完成了。
@@ -361,5 +363,7 @@ strokeAnimation.removedOnCompletion = YES;
 
 ## 四、结束语
 时间仓促，有许多不完善的地方，还请海涵，有什么问题可以联系我<br>
-CSDN博客地址：<https://blog.csdn.net/guchuang2599/article/details/90231310>
+CSDN博客地址：<https://blog.csdn.net/guchuang2599/article/details/90231310><br>
+
+另：Swift版本地址<https://github.com/MichaelJackchuang/GCChartSwift>
 
